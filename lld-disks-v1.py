@@ -17,9 +17,6 @@ if __name__ == "__main__":
     skippable = skippable if not _skip else skippable|set(_disks)
     if _skip:
         _disks = ()
-    print(_skip)
-    print(_disks)
-    print(skippable)
     devices = (device for device in os.listdir("/sys/class/block")
                if not any(ignore in device for ignore in skippable) and (_skip or any(_include in device for _include in _disks)))
     data = [{"{#DEVICENAME}": device} for device in devices]
