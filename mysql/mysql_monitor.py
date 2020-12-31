@@ -2,15 +2,40 @@
 # -*- coding: utf-8 -*-
 import codecs
 import json
+#import logging
 import subprocess
 import sys
 import types
+#from logging.handlers import TimedRotatingFileHandler
+#from os import path
 
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 PY34 = sys.version_info[0:2] >= (3, 4)
-_mysql_software_path = '/usr/local/mysql/mysql-8.0.22-el7-x86_64/bin/mysql'
 
+
+#
+# CURRENT_DIR = path.abspath(path.dirname(__file__))
+# logger = logging.getLogger()
+# # logging.basicConfig()
+# filehandler = TimedRotatingFileHandler(path.join(path.split(__file__)[0],'running.log'),when='D',backupCount=7,encoding='utf-8')
+# lformat = logging.Formatter(fmt=' %(asctime)s-%(levelname)s-%(name)s-%(thread)d-%(message)s')
+# filehandler.setFormatter(lformat)
+# logger.addHandler(filehandler)
+# #logger.setLevel(logging.INFO)
+# LOG_LEVEL='DEBUG'
+# logging.getLogger().setLevel(logging._nameToLevel[LOG_LEVEL])
+#
+# logger = logging.getLogger(__file__)
+
+TEST=True
+
+_mysql_software_path = '/usr/local/mysql/mysql-8.0.22-el7-x86_64/bin/mysql'
+SQL_GET_VARIABLE="(SELECT variable_value from performance_schema.global_status where variable_name = '{s_variable_name}' )"
+SQL_TABLE_COUNTS="select count(1) from information_schema.tables where table_schema='{s_table_schema}' and table_name ='{s_table_name}' "
+SQL_TABLE_SIZE="select sum(data_length+index_length) from information_schema.tables \
+where ('all'= '{s_table_schema}' and table_schema not in ('sys','information_schema','performance_schema','mysql') or table_schema='{s_table_schema}' ) \
+ and ('all' = '{s_table_name}' or  table_name ='{s_table_name}' )"
 
 if PY3:
     string_types = str,
@@ -153,17 +178,21 @@ def _getLine(content):
     return _c.strip()
 
 def _deploy_sql(port,sql):
-    cmd = _mysql_software_path + ' --login-path=zabbix_'+port
-    if sql:
-        cmd +=  ' -N -e "' + ' ' + sql + '"'
-    #res = subprocess.run(cmd,capture_output=True,shell=True,encoding='utf8')
-    _stdout = _stdin = _stderr = None
-    print(cmd)
-    subprocess.Popen(cmd,stdin=_stdin,stdout=_stdout,stderr=_stderr)
-    return _stdout,_stdin,_stderr
+    cmd = [_mysql_software_path, '--login-path=zabbix_'+port,'-N','-e',sql]
+    #if sql:
+    #    cmd +=  ' -N -e "' + ' ' + sql + '"'
+    if TEST:
+        print(cmd)
+    try:
+        return subprocess.check_output(cmd,stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        return 'errcode:%s,errmsg:%s'%(getattr(e,'returncode','1'),getattr(e,'output','error'))
+
 
 def _getOutput(port,cmd='select 1;'):
-    _stdout,_,_ = _deploy_sql(port,sql=cmd)
+    _stdout = _deploy_sql(port,sql=cmd)
+    if TEST:
+        print(_stdout)
     return _getLine(_stdout)
 
 def _check_mysql_alive(port):
@@ -186,10 +215,61 @@ def none_null_stringNone(param):
         return True
     return isNull(param) or stringNone(param)
 
-
-
-if __name__ == '__main__':
-    _ports = str(sys.argv[1])
+def discovery(ports):
+    _ports = str(ports)
     if not none_null_stringNone(_ports):
         data = [{"{#MYSQL_PORT}": _port} for _port in _ports.split('_') if ( int(_port) > 3000 and  _check_mysql_alive(_port)) ]
         print(json.dumps({"data": data}, indent=4))
+
+def stats(port,formula):
+    _operator = ('+','-','*','/','(',')')
+    _tokens = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z', \
+               'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','_')
+    _sql = 'select '
+    _variable_name = ''
+    for _c in formula[:]:
+        if _c in _tokens:
+            _variable_name += _c
+        else:
+            if not none_null_stringNone(_variable_name):
+                _sql = _sql + ' ' + SQL_GET_VARIABLE.format(s_variable_name=_variable_name)
+            if _c in _operator:
+                _sql = _sql + ' ' + _c
+            _variable_name = ''
+    if not none_null_stringNone(_variable_name):
+        _sql = _sql + ' ' + SQL_GET_VARIABLE.format(s_variable_name=_variable_name)
+    _sql += ' ;'
+    _res = _getOutput(port,_sql)
+    print(_res)
+
+
+def get_value(port,variable_name):
+    _res = _getOutput(port,SQL_GET_VARIABLE.format(s_variable_name=variable_name))
+    print(_res)
+
+def check_alive(port):
+    _flag = 1 if _check_mysql_alive(port) else 0
+    print(_flag)
+
+def table_counts(port,table_schema,table_name):
+    _res = _getOutput(port,SQL_TABLE_COUNTS.format(s_table_schema=table_schema,s_table_name=table_name))
+    print(_res)
+
+def table_size(port,table_schema='all',table_name='all'):
+    _res = _getOutput(port,SQL_TABLE_SIZE.format(s_table_schema=table_schema,s_table_name=table_name))
+    print(_res)
+
+
+OPERATE={
+    'discovery':discovery,
+    'stats':stats,
+    'value':get_value,
+    'alive':check_alive,
+    'counts':table_counts,
+    'size':table_size
+}
+
+if __name__ == '__main__':
+    _operate = str(sys.argv[1])
+    if _operate in OPERATE.keys():
+        OPERATE[_operate](*(sys.argv[2:]))

@@ -1,0 +1,10 @@
+create user zabbix@'localhost' idenfified by '8845';
+GRANT USAGE ON information_schema.* TO `zabbix`@`localhost`; 
+GRANT USAGE ON performance_schema.* TO `zabbix`@`localhost`; 
+GRANT USAGE ON sys.* TO `zabbix`@`localhost`; 
+GRANT USAGE ON mysql.* TO `zabbix`@`localhost`; 
+grant select on information_schema.*  to zabbix@'localhost';
+grant select on performance_schema.*  to zabbix@'localhost';
+grant select on sys.*  to zabbix@'localhost';
+grant select on mysql.* to zabbix@'localhost';
+GRANT SESSION_VARIABLES_ADMIN ON *.* TO `zabbix`@`localhost` ;
