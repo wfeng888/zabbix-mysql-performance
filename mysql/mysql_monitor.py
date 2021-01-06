@@ -31,7 +31,8 @@ PY34 = sys.version_info[0:2] >= (3, 4)
 TEST=True
 
 _mysql_software_path = '/usr/local/mysql/mysql-8.0.22-el7-x86_64/bin/mysql'
-SQL_GET_VARIABLE="(SELECT variable_value from performance_schema.global_status where variable_name = '{s_variable_name}' )"
+SQL_GET_STATUS="(SELECT variable_value from performance_schema.global_status where variable_name = '{s_variable_name}' )"
+SQL_GET_VARIABLE="(SELECT variable_value from performance_schema.global_variables where variable_name = '{s_variable_name}' )"
 SQL_TABLE_COUNTS="select count(1) from information_schema.tables where table_schema='{s_table_schema}' and table_name ='{s_table_name}' "
 SQL_TABLE_SIZE="select sum(data_length+index_length) from information_schema.tables \
 where ('all'= '{s_table_schema}' and table_schema not in ('sys','information_schema','performance_schema','mysql') or table_schema='{s_table_schema}' ) \
@@ -223,28 +224,44 @@ def discovery(ports):
 
 def stats(port,formula):
     _operator = ('+','-','*','/','(',')')
+    _delimiter = (':',)
+    _VAR = 'V'
     _tokens = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z', \
                'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','_')
     _sql = 'select '
     _variable_name = ''
+    _last_c = ''
+    _is_var = False
     for _c in formula[:]:
-        if _c in _tokens:
+        if _c in _delimiter:
+            if _VAR == _last_c:
+                _variable_name = ''
+                _is_var = True
+        elif _c in _tokens:
             _variable_name += _c
         else:
             if not none_null_stringNone(_variable_name):
-                _sql = _sql + ' ' + SQL_GET_VARIABLE.format(s_variable_name=_variable_name)
+                if _is_var:
+                    _sql = _sql + ' ' + SQL_GET_VARIABLE.format(s_variable_name=_variable_name)
+                else:
+                     _sql = _sql + ' ' + SQL_GET_STATUS.format(s_variable_name=_variable_name)
             if _c in _operator:
                 _sql = _sql + ' ' + _c
             _variable_name = ''
+            _is_var = False
+        _last_c = _c
     if not none_null_stringNone(_variable_name):
-        _sql = _sql + ' ' + SQL_GET_VARIABLE.format(s_variable_name=_variable_name)
+        if _is_var:
+            _sql = _sql + ' ' + SQL_GET_VARIABLE.format(s_variable_name=_variable_name)
+        else:
+            _sql = _sql + ' ' + SQL_GET_STATUS.format(s_variable_name=_variable_name)
     _sql += ' ;'
     _res = _getOutput(port,_sql)
     print(_res)
 
 
 def get_value(port,variable_name):
-    _res = _getOutput(port,SQL_GET_VARIABLE.format(s_variable_name=variable_name))
+    _res = _getOutput(port,SQL_GET_STATUS.format(s_variable_name=variable_name))
     print(_res)
 
 def check_alive(port):
