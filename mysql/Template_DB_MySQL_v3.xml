@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.2</version>
-    <date>2020-12-16T05:35:51Z</date>
+    <date>2021-01-06T01:51:52Z</date>
     <groups>
         <group>
             <name>Templates/Databases</name>
@@ -28,6 +28,9 @@
                     <name>MySQL Buffer</name>
                 </application>
                 <application>
+                    <name>MySQL Calculate indicators</name>
+                </application>
+                <application>
                     <name>Mysql Com_components</name>
                 </application>
                 <application>
@@ -38,6 +41,9 @@
                 </application>
                 <application>
                     <name>MySQL IO</name>
+                </application>
+                <application>
+                    <name>MySQL middle data</name>
                 </application>
                 <application>
                     <name>MySQL Myisam</name>
@@ -118,7 +124,7 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <params>latest(&quot;mysql.status3[Threads_running,{#MYSQLPORT}]&quot;)/latest(&quot;mysql.status3[Threads_connected,{#MYSQLPORT}]&quot;)</params>
+                            <params>last(&quot;mysql.status3[Threads_running,{#MYSQLPORT}]&quot;)/last(&quot;mysql.status3[Threads_connected,{#MYSQLPORT}]&quot;)</params>
                             <ipmi_sensor/>
                             <authtype>0</authtype>
                             <username/>
@@ -130,7 +136,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>MySQL Performance</name>
+                                    <name>MySQL Calculate indicators</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -190,7 +196,67 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>MySQL Sttmnt Exec</name>
+                                    <name>MySQL Calculate indicators</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>MySQL:$1:innodb_buffer_hit_ratio</name>
+                            <type>15</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>innodb_buffer_hit_ratio[{#MYSQLPORT}]</key>
+                            <delay>{$INNODB_BUFFER_HIT_PERIOD}</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params>(1-last(&quot;mysql.status4[innodb_buffer_pool_reads,{#MYSQLPORT}]&quot;)/last(&quot;mysql.status4[innodb_buffer_pool_read_requests,{#MYSQLPORT}]))*100</params>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>MySQL Calculate indicators</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -224,7 +290,7 @@
                             <snmp_community/>
                             <snmp_oid/>
                             <key>key_cache_hit_rate[{#MYSQLPORT}]</key>
-                            <delay>15m</delay>
+                            <delay>{$KEY_CACHE_HIT_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -238,7 +304,7 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <params>(1-change(&quot;mysql.status4[Key_reads,{#MYSQLPORT}]&quot;)/change(&quot;mysql.status4[Key_read_requests,{#MYSQLPORT}]&quot;))*100</params>
+                            <params>(1-last(&quot;mysql.status4[Key_reads,{#MYSQLPORT}]&quot;)/last(&quot;mysql.status4[Key_read_requests,{#MYSQLPORT}]&quot;))*100</params>
                             <ipmi_sensor/>
                             <authtype>0</authtype>
                             <username/>
@@ -250,7 +316,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>MySQL Myisam</name>
+                                    <name>MySQL Calculate indicators</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -294,7 +360,7 @@
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -2191,7 +2257,7 @@ server在表访问时使用存储引擎的多范围读实现的次数</descripti
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>MySQL:$2:Mysql Aborted_clients</name>
+                            <name>MySQL:$2:Aborted_clients</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -2263,7 +2329,7 @@ server在表访问时使用存储引擎的多范围读实现的次数</descripti
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>MySQL:$2:Mysql Aborted_connects</name>
+                            <name>MySQL:$2:Aborted_connects</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -2274,7 +2340,7 @@ server在表访问时使用存储引擎的多范围读实现的次数</descripti
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units>qps</units>
+                            <units>ops</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -2645,7 +2711,7 @@ server在表访问时使用存储引擎的多范围读实现的次数</descripti
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Bytes_received,{#MYSQLPORT}]</key>
-                            <delay>1m</delay>
+                            <delay>{$MYSQL_NETWORK_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -2717,7 +2783,7 @@ server在表访问时使用存储引擎的多范围读实现的次数</descripti
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Bytes_sent,{#MYSQLPORT}]</key>
-                            <delay>1m</delay>
+                            <delay>{$MYSQL_NETWORK_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -2860,7 +2926,7 @@ server在表访问时使用存储引擎的多范围读实现的次数</descripti
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Connections,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$CONN_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -2932,7 +2998,7 @@ server在表访问时使用存储引擎的多范围读实现的次数</descripti
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Connection_errors_accept,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$CONN_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -3004,7 +3070,7 @@ these variables provides information about errors thar occurs duing the client c
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Connection_errors_internal,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$CONN_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -3078,7 +3144,7 @@ the number of connections refused due to internal errors in the server, such as 
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Connection_errors_max_connections,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$CONN_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -3152,7 +3218,7 @@ the number of connections refused because the server  max_connections limit  was
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Connection_errors_peer_address,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$CONN_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -3226,7 +3292,7 @@ the number of errors that occurred while searching for connecting client ip addr
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Connection_errors_select,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$CONN_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -3300,7 +3366,7 @@ the number of errors that occured during calls to select() or poll() on listenin
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Connection_errors_tcpwrap,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$CONN_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -4898,7 +4964,7 @@ Innodb_buffer_pool_pages_misc = Innodb_buffer_pool_pages_total - Innodb_buffer_p
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages/s</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -4970,7 +5036,7 @@ Innodb_buffer_pool_pages_misc = Innodb_buffer_pool_pages_total - Innodb_buffer_p
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -5107,7 +5173,7 @@ Innodb_buffer_pool_pages_misc = Innodb_buffer_pool_pages_total - Innodb_buffer_p
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -5179,7 +5245,7 @@ Innodb_buffer_pool_pages_misc = Innodb_buffer_pool_pages_total - Innodb_buffer_p
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -5251,7 +5317,7 @@ Innodb_buffer_pool_pages_misc = Innodb_buffer_pool_pages_total - Innodb_buffer_p
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -5323,7 +5389,7 @@ innodb随机预读的页的数量。这种情况通常发生在查询以随机�
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages/s</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -5467,7 +5533,7 @@ innodb随机预读的页的数量。这种情况通常发生在查询以随机�
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages*transactions</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -5879,7 +5945,7 @@ this function should be called at a mini-transaction commit, if a page was modif
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>ops</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -6815,7 +6881,7 @@ redo日志fsync调用的次数。&#13;
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units>bps</units>
+                            <units>pages/s</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -6885,9 +6951,9 @@ redo日志fsync调用的次数。&#13;
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
-                            <value_type>3</value_type>
+                            <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages/s</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -7734,7 +7800,7 @@ innodb表更新的行数。</description>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Innodb_undo_tablespaces_explicit,{#MYSQLPORT}]</key>
-                            <delay>10s</delay>
+                            <delay>{$MYSQL_UNDO_TABLESPACE_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -7799,7 +7865,7 @@ innodb表更新的行数。</description>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Innodb_undo_tablespaces_implicit,{#MYSQLPORT}]</key>
-                            <delay>10s</delay>
+                            <delay>{$MYSQL_UNDO_TABLESPACE_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -7864,7 +7930,7 @@ innodb表更新的行数。</description>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Innodb_undo_tablespaces_total,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$MYSQL_UNDO_TABLESPACE_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -8061,7 +8127,7 @@ MyISAM key缓存未使用的block的数量。</description>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units>ops</units>
+                            <units>blocks/s</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -9178,7 +9244,7 @@ key cache的逻辑读请求数。</description>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Table_open_cache_hits,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$TABLE_OPEN_CACHE_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -9205,7 +9271,7 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>MySQL Performance</name>
+                                    <name>MySQL middle data</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -9250,7 +9316,7 @@ key cache的逻辑读请求数。</description>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Table_open_cache_misses,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$TABLE_OPEN_CACHE_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -9277,7 +9343,7 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>MySQL Performance</name>
+                                    <name>MySQL middle data</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -9322,7 +9388,7 @@ key cache的逻辑读请求数。</description>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status3[Table_open_cache_overflows,{#MYSQLPORT}]</key>
-                            <delay>30s</delay>
+                            <delay>{$TABLE_OPEN_CACHE_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -9721,12 +9787,280 @@ key cache的逻辑读请求数。</description>
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>MySQL:$2:Key_reads_stats</name>
+                            <name>MySQL:$2:innodb_buffer_pool_reads_mid</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>mysql.status4[innodb_buffer_pool_reads,{#MYSQLPORT}]</key>
+                            <delay>{$INNODB_BUFFER_HIT_PERIOD}</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>pages</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>MySQL middle data</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>9</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>MySQL:$2:innodb_buffer_pool_read_requests_mid</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>mysql.status4[innodb_buffer_pool_read_requests,{#MYSQLPORT}]</key>
+                            <delay>{$INNODB_BUFFER_HIT_PERIOD}</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units>pages</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>MySQL middle data</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>9</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>MySQL:$2:Innodb_log_writes_mid</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>mysql.status4[Innodb_log_writes,{#MYSQLPORT}]</key>
+                            <delay>{$REDO_WRITE_PERIOD}</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>MySQL middle data</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>9</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>MySQL:$2:Innodb_os_log_written_mid</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>mysql.status4[Innodb_os_log_written,{#MYSQLPORT}]</key>
+                            <delay>{$REDO_WRITE_PERIOD}</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>MySQL middle data</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>9</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>MySQL:$2:Key_reads_mid</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status4[Key_reads,{#MYSQLPORT}]</key>
-                            <delay>15m</delay>
+                            <delay>{$KEY_CACHE_HIT_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -9752,12 +10086,19 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Mysql Statistics</name>
+                                    <name>MySQL middle data</name>
                                 </application>
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing/>
+                            <preprocessing>
+                                <step>
+                                    <type>9</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
@@ -9785,12 +10126,12 @@ key cache的逻辑读请求数。</description>
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>MySQL:$2:Key_read_requests_stats</name>
+                            <name>MySQL:$2:Key_read_requests_mid</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status4[Key_read_requests,{#MYSQLPORT}]</key>
-                            <delay>15m</delay>
+                            <delay>{$KEY_CACHE_HIT_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -9816,12 +10157,19 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>MySQL Myisam</name>
+                                    <name>MySQL middle data</name>
                                 </application>
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing/>
+                            <preprocessing>
+                                <step>
+                                    <type>9</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
@@ -9849,12 +10197,12 @@ key cache的逻辑读请求数。</description>
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>MySQL:$2:Queries_stats</name>
+                            <name>MySQL:$2:Queries_mid</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status4[Queries,{#MYSQLPORT}]</key>
-                            <delay>15m</delay>
+                            <delay>{$SLOW_QUERY_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -9879,6 +10227,9 @@ key cache的逻辑读请求数。</description>
                             <description>查询执行的数量，用于计算慢查询占比。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
+                                <application>
+                                    <name>MySQL middle data</name>
+                                </application>
                                 <application>
                                     <name>Mysql Statistics</name>
                                 </application>
@@ -9920,12 +10271,12 @@ key cache的逻辑读请求数。</description>
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>MySQL:$2:Slow_queries_stats</name>
+                            <name>MySQL:$2:Slow_queries_mid</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>mysql.status4[Slow_queries,{#MYSQLPORT}]</key>
-                            <delay>15m</delay>
+                            <delay>{$SLOW_QUERY_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -9951,7 +10302,7 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Mysql Statistics</name>
+                                    <name>MySQL middle data</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -10002,7 +10353,7 @@ key cache的逻辑读请求数。</description>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>pages</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -10010,7 +10361,7 @@ key cache的逻辑读请求数。</description>
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <params>latest(&quot;mysql.status3[Innodb_dblwr_pages_written,{#MYSQLPORT}]&quot;)/latest(&quot;mysql.status3[Innodb_dblwr_writes,{#MYSQLPORT}]&quot;)</params>
+                            <params>last(&quot;mysql.status3[Innodb_dblwr_pages_written,{#MYSQLPORT}]&quot;)/last(&quot;mysql.status3[Innodb_dblwr_writes,{#MYSQLPORT}]&quot;)</params>
                             <ipmi_sensor/>
                             <authtype>0</authtype>
                             <username/>
@@ -10022,7 +10373,7 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>MySQL IO</name>
+                                    <name>MySQL Calculate indicators</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -10060,7 +10411,7 @@ key cache的逻辑读请求数。</description>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>redo_log_averate_write_bytes[{#MYSQLPORT}]</key>
-                            <delay>10s</delay>
+                            <delay>{$REDO_WRITE_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -10074,7 +10425,7 @@ key cache的逻辑读请求数。</description>
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <params>latest(&quot;mysql.status3[Innodb_os_log_written,{#MYSQLPORT}]&quot;)/latest(&quot;mysql.status3[Innodb_log_writes,{#MYSQLPORT}]&quot;)</params>
+                            <params>last(&quot;mysql.status4[Innodb_os_log_written,{#MYSQLPORT}]&quot;)/last(&quot;mysql.status4[Innodb_log_writes,{#MYSQLPORT}]&quot;)</params>
                             <ipmi_sensor/>
                             <authtype>0</authtype>
                             <username/>
@@ -10086,7 +10437,7 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Mysql Statistics</name>
+                                    <name>MySQL Calculate indicators</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -10120,7 +10471,7 @@ key cache的逻辑读请求数。</description>
                             <snmp_community/>
                             <snmp_oid/>
                             <key>slow_queries_rate[{#MYSQLPORT}]</key>
-                            <delay>15m</delay>
+                            <delay>{$SLOW_QUERY_PERIOD}</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -10134,7 +10485,7 @@ key cache的逻辑读请求数。</description>
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <params>latest(&quot;mysql.status4[Slow_queries,{#MYSQLPORT}]&quot;)/latest(&quot;mysql.status4[Queries,{#MYSQLPORT}]&quot;)*100</params>
+                            <params>last(&quot;mysql.status4[Slow_queries,{#MYSQLPORT}]&quot;)/last(&quot;mysql.status4[Queries,{#MYSQLPORT}]&quot;)*100</params>
                             <ipmi_sensor/>
                             <authtype>0</authtype>
                             <username/>
@@ -10146,7 +10497,7 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>MySQL Performance</name>
+                                    <name>MySQL Calculate indicators</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -10198,7 +10549,7 @@ key cache的逻辑读请求数。</description>
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <params>latest(&quot;mysql.status3[Table_open_cache_hits,{#MYSQLPORT}]&quot;)/(latest(&quot;mysql.status3[Table_open_cache_misses,{#MYSQLPORT}]&quot;)+latest(&quot;mysql.status3[Table_open_cache_hits,{#MYSQLPORT}]&quot;))</params>
+                            <params>last(&quot;mysql.status3[Table_open_cache_hits,{#MYSQLPORT}]&quot;)/(last(&quot;mysql.status3[Table_open_cache_misses,{#MYSQLPORT}]&quot;)+last(&quot;mysql.status3[Table_open_cache_hits,{#MYSQLPORT}]&quot;))</params>
                             <ipmi_sensor/>
                             <authtype>0</authtype>
                             <username/>
@@ -10210,7 +10561,7 @@ key cache的逻辑读请求数。</description>
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Mysql Statistics</name>
+                                    <name>MySQL Calculate indicators</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -10289,8 +10640,40 @@ key cache的逻辑读请求数。</description>
             <httptests/>
             <macros>
                 <macro>
+                    <macro>{$CONN_PERIOD}</macro>
+                    <value>30s</value>
+                </macro>
+                <macro>
+                    <macro>{$INNODB_BUFFER_HIT_PERIOD}</macro>
+                    <value>15m</value>
+                </macro>
+                <macro>
+                    <macro>{$KEY_CACHE_HIT_PERIOD}</macro>
+                    <value>15m</value>
+                </macro>
+                <macro>
+                    <macro>{$MYSQL_NETWORK_PERIOD}</macro>
+                    <value>1m</value>
+                </macro>
+                <macro>
+                    <macro>{$MYSQL_UNDO_TABLESPACE_PERIOD}</macro>
+                    <value>1m</value>
+                </macro>
+                <macro>
                     <macro>{$PORTS}</macro>
                     <value>3309</value>
+                </macro>
+                <macro>
+                    <macro>{$REDO_WRITE_PERIOD}</macro>
+                    <value>10s</value>
+                </macro>
+                <macro>
+                    <macro>{$SLOW_QUERY_PERIOD}</macro>
+                    <value>15m</value>
+                </macro>
+                <macro>
+                    <macro>{$TABLE_OPEN_CACHE_PERIOD}</macro>
+                    <value>30s</value>
                 </macro>
             </macros>
             <templates/>
