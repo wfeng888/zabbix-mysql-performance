@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import codecs
 import json
@@ -28,7 +28,7 @@ PY34 = sys.version_info[0:2] >= (3, 4)
 #
 # logger = logging.getLogger(__file__)
 
-TEST=True
+TEST=False
 
 _mysql_software_path = '/usr/local/mysql/mysql-8.0.22-el7-x86_64/bin/mysql'
 SQL_GET_STATUS="(SELECT variable_value from performance_schema.global_status where variable_name = '{s_variable_name}' )"
