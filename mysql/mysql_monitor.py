@@ -219,7 +219,7 @@ def none_null_stringNone(param):
 def discovery(ports):
     _ports = str(ports)
     if not none_null_stringNone(_ports):
-        data = [{"{#MYSQL_PORT}": _port} for _port in _ports.split('_') if ( int(_port) > 3000 and  _check_mysql_alive(_port)) ]
+        data = [{"{#MYSQLPORT}": _port} for _port in _ports.split('_') if ( int(_port) > 3000 and  _check_mysql_alive(_port)) ]
         print(json.dumps({"data": data}, indent=4))
 
 def stats(port,formula):
